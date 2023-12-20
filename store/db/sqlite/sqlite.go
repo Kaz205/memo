@@ -30,8 +30,7 @@ func NewDB(profile *profile.Profile) (store.Driver, error) {
 	// - No shared-cache: it's obsolete; WAL journal mode is a better solution.
 	// - No foreign key constraints: it's currently disabled by default, but it's a
 	// good practice to be explicit and prevent future surprises on SQLite upgrades.
-	// - Journal mode set to WAL: it's the recommended journal mode for most applications
-	// as it prevents locking issues.
+	// - Journal mode set to DELETE.
 	//
 	// Notes:
 	// - When using the `modernc.org/sqlite` driver, each pragma must be prefixed with `_pragma=`.
@@ -40,7 +39,7 @@ func NewDB(profile *profile.Profile) (store.Driver, error) {
 	// - https://pkg.go.dev/modernc.org/sqlite#Driver.Open
 	// - https://www.sqlite.org/sharedcache.html
 	// - https://www.sqlite.org/pragma.html
-	sqliteDB, err := sql.Open("sqlite", profile.DSN+"?_pragma=foreign_keys(0)&_pragma=busy_timeout(10000)&_pragma=journal_mode(WAL)")
+	sqliteDB, err := sql.Open("sqlite", profile.DSN+"?_pragma=foreign_keys(0)&_pragma=busy_timeout(10000)&_pragma=journal_mode(DELETE)")
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to open db with dsn: %s", profile.DSN)
 	}
