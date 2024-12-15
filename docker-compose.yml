@@ -1,0 +1,11 @@
+services:
+  memos:
+    image: memos
+    container_name: memos
+    build:
+      context: .
+    volumes:
+      - /home/kazuki/.memos/:/var/opt/memos
+    ports:
+      - 5230:5230
+    restart: always
