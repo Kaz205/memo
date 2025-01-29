@@ -8,6 +8,9 @@ import { isSuperUser } from "@/utils/user";
 import Renderer from "./Renderer";
 import { RendererContext } from "./types";
 
+// MAX_DISPLAY_HEIGHT is the maximum height of the memo content to display in compact mode.
+const MAX_DISPLAY_HEIGHT = 256;
+
 interface Props {
   nodes: Node[];
   memoName?: string;
@@ -43,6 +46,10 @@ const MemoContent: React.FC<Props> = (props: Props) => {
     }
     if (!memoContentContainerRef.current) {
       return;
+    }
+
+    if ((memoContentContainerRef.current as HTMLDivElement).getBoundingClientRect().height > MAX_DISPLAY_HEIGHT) {
+      setShowCompactMode("ALL");
     }
   }, []);
 
